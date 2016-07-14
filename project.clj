@@ -8,11 +8,11 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "0.1.4"
+(defproject com.7theta/reflecti "0.1.5"
   :description "A component library based on React"
   :url "https://github.com7theta/reflecti"
-  :license {:name "7theta Commercial License"
-            :url "http://7theta.com/"}
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.89"]
 
