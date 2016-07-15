@@ -11,7 +11,7 @@
 (ns reflecti.slider-example.db
   (:require [reagent.core :as r]))
 
-(defonce slider-value (r/atom ""))
+(defonce slider-value (r/atom nil))
 
 (defn on-slide
   [_ value]

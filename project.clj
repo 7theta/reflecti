@@ -8,18 +8,18 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "0.1.5"
+(defproject com.7theta/reflecti "0.2.0"
   :description "A component library based on React"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.89"]
+                 [org.clojure/clojurescript "1.9.93"]
 
-                 [com.7theta/utilis "0.7.0"]
+                 [com.7theta/utilis "0.8.0"]
                  [com.7theta/via "0.2.1"]
 
-                 [cljs-react-material-ui "0.2.12"]
+                 [cljs-react-material-ui "0.2.19"]
                  [reagent "0.6.0-alpha" :exclusions [org.clojure/tools.reader cljsjs/react]]
                  [re-frame "0.7.0"]
 
@@ -30,18 +30,17 @@
 
                  [prismatic/schema "1.1.2"]]
   :source-paths ["src/cljs"]
-  :plugins [[lein-cljsbuild "1.0.6"]
-            [lein-figwheel "0.3.3" :exclusions [cider/cider-nrepl
-                                                org.clojure/clojure]]]
+  :plugins [[lein-cljsbuild "1.1.3"]
+            [lein-figwheel "0.5.4-7" :exclusions [cider/cider-nrepl
+                                                  org.clojure/clojure]]]
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
   :profiles {:dev {:source-paths ["dev" "example/src"]
                    :resource-paths ["example/resources"]
-                   :dependencies [[figwheel-sidecar "0.5.0-3"]
+                   :dependencies [[figwheel-sidecar "0.5.4-7"]
                                   [com.cemerick/piggieback "0.2.1"]]}}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
-                        :resource-paths ["resources/public"]
                         :figwheel {:on-jsload "reflecti.example.core/mount-root"}
                         :warning-handlers [(fn [warning-type env extra]
                                              (when (warning-type cljs.analyzer/*cljs-warnings*)

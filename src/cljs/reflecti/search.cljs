@@ -46,10 +46,11 @@
          default-style {:width 400
                         :margin-left 40
                         :height 48
-                        :zIndex 3}]
+                        :zIndex 3
+                        :zDepth 3}]
      [mui/mui-theme-provider
       {:mui-theme (ui/get-mui-theme theme)}
-      [mui/paper {:zDepth (or (:zIndex default-style) (:zIndex style))
+      [mui/paper {:zDepth (or (:zDepth style) (:zDepth default-style))
                   :style (merge default-style style)}
        [floating-search-bar (merge {:suggestions (map :display-text search-suggestions)
                                     :theme search-theme
@@ -238,7 +239,7 @@
                                  :onClick (fn [_]
                                             (when (not-empty text)
                                               (r/set-state this {:text ""})
-                                              (clear-fn)))
+                                              (when clear-fn (clear-fn))))
                                  :onMouseOver (fn [_] (r/set-state this {:clear-icon-hover true}))
                                  :onMouseOut (fn [_] (r/set-state this {:clear-icon-hover false}))})]
            (if (and show-suggestions
