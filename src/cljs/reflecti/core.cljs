@@ -43,17 +43,17 @@
   [table/table data-source table-options])
 
 (defn search-drawer
-  [custom-opts]
+  [& [custom-opts]]
   [search-with-drawer/side-drawer-with-search custom-opts])
 
 (defn search-bar
-  [custom-opts]
+  [& [custom-opts]]
   [search/search-bar custom-opts])
 
 (defn slider
-  [custom-opts]
+  [& [custom-opts]]
   [slider/range-slider custom-opts])
 
 (defn date-time-picker
-  [custom-opts]
+  [& [custom-opts]]
   [picker/date-time-picker custom-opts])

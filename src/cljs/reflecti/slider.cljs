@@ -37,7 +37,6 @@
     [mui/paper {:zDepth 3
                 :style style}
      [mui/slider {:style slider-style
-                  :tooltip "Time range"
                   :disableFocusRipple true
                   :onChange (fn [event value]
                               (when on-slide (on-slide event value)))}]]))
