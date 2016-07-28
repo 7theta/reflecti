@@ -255,7 +255,7 @@ A floating search box with suggestions as a drop down.
  ;; function to call when search box's clear button is pressed
  :on-clear (fn [] ...)
  
- ;; function to call when a suggestion is clicked
+ ;; function to call when a suggestion is clicked.
  ;; 'suggestion' is the exact map that was selected as provided in
  ;; 'search-suggestions'.
  :on-suggestion-click (fn [suggestion] ...)
@@ -297,9 +297,10 @@ A floating search box with suggestions as a drop down that also comes with a sli
  :on-search (fn [search-text] ...)
  ;; function to call when search box's clear button is pressed
  :on-clear (fn [] ...)
- ;; function to call when a suggestion is clicked
- ;;   suggestion-text is the :display-text that was given on the clicked search-suggested
- :on-suggestion-click (fn [suggestion-text] ...)
+ ;; function to call when a suggestion is clicked.
+ ;; 'suggestion' is the exact map that was selected as provided in
+ ;; 'search-suggestions'.
+ :on-suggestion-click (fn [suggestion] ...)
  :drawer-theme ;; style options for the drawer
  :search-theme ;; style options for the search box
  }
