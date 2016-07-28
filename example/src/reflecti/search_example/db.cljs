@@ -119,6 +119,6 @@
   (reset! search-suggestions @all-suggestions))
 
 (defn on-suggestion-click
-  [suggestion-text]
+  [suggestion]
   (reset! open? true)
-  (reset! clicked-suggestion suggestion-text))
+  (reset! clicked-suggestion (:display-text suggestion)))
