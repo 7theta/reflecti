@@ -248,7 +248,7 @@ A floating search box with suggestions as a drop down.
  ;; either the search bar or suggestions dropdown.
  :search-suggestions [{:display-text "Suggestion 1"}]
              
- ;; Called with the text present in the search bar every time it
+ ;; called with the text present in the search bar every time it
  ;; changes or a search request is made.
  :on-search (fn [search-text] ...)
  
