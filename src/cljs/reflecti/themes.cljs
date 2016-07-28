@@ -89,36 +89,6 @@
                     :transition "none"}
             :overlay-style {:backgroundColor ""}})))
 
-(def default-search-theme
-  (let [icon-width 48
-        search-bar-margin 8
-        search-bar-height 48
-        total-width 400
-        total-height icon-width
-        icon-bar-width 100
-        text-field-padding-left 16
-        drop-down-item-style {:padding-left 16
-                              :padding-top 0
-                              :padding-bottom 0}]
-    (merge light-theme
-           {:width total-width
-            :height total-height
-            :style {:width total-width
-                    :margin-left 220}
-            :icon-bar-style {:width icon-bar-width
-                             :icon-style {:position "relative"
-                                          :top 8
-                                          :width icon-width}
-                             :separator-style {:height (* total-height 0.60)
-                                               :top 10
-                                               :margin-left 0
-                                               :position "relative"}}
-            :text-field-style {:padding-left text-field-padding-left
-                               :width (- total-width icon-bar-width text-field-padding-left)}
-            :suggestions-pane-style {:drop-down-style {:width "100%"}
-                                     :drop-down-item-style drop-down-item-style}
-            :hint-text "Search"})))
-
 (def default-slider-theme
   (merge light-theme
          {:style {:width 400

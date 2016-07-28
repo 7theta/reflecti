@@ -27,7 +27,7 @@
                      :on-suggestion-click db/on-suggestion-click
                      :open-drawer? @db/open?
                      :drawer-theme themes/default-drawer-theme
-                     :search-theme themes/default-search-theme}]
+                     :search-theme themes/light-theme}]
     [mui/mui-theme-provider
      {:mui-theme (ui/get-mui-theme)}
      [:div {:style page-style}

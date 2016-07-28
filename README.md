@@ -241,15 +241,33 @@ A floating search box with suggestions as a drop down.
 
 #####Search Custom Opts
 ```clojure
-{:search-suggestions ;; array of maps containing all search suggestions, 
-                     ;; key :display-text will be displayed in the drop down
+{
+
+ ;; collection of maps, each containing at a minimum a key
+ ;; ':display-text' to be used when displaying the suggestion in
+ ;; either the search bar or suggestions dropdown.
+ :search-suggestions [{:display-text "Suggestion 1"}]
+             
+ ;; called with the text present in the search bar every time it
+ ;; changes or a search request is made.
  :on-search (fn [search-text] ...)
+ 
  ;; function to call when search box's clear button is pressed
  :on-clear (fn [] ...)
- ;; function to call when a suggestion is clicked
- ;;   suggestion-text is the :display-text that was given on the clicked search-suggested
- :on-suggestion-click (fn [suggestion-text] ...)
- :theme ;; style options
+ 
+ ;; function to call when a suggestion is clicked.
+ ;; 'suggestion' is the exact map that was selected as provided in
+ ;; 'search-suggestions'.
+ :on-suggestion-click (fn [suggestion] ...)
+ 
+ ;; 'suggestions-pane' is a reagent component that can be provided to
+ ;; customize the suggestions dropdown on the search-bar. If no component
+ ;; is provided, a default is used.
+ :suggestions-pane (fn [{:keys [suggestions on-selection]}] [:div suggestions])
+ 
+ ;; style options
+ :theme themes/light-theme
+ 
  }
 ```
 
@@ -279,9 +297,10 @@ A floating search box with suggestions as a drop down that also comes with a sli
  :on-search (fn [search-text] ...)
  ;; function to call when search box's clear button is pressed
  :on-clear (fn [] ...)
- ;; function to call when a suggestion is clicked
- ;;   suggestion-text is the :display-text that was given on the clicked search-suggested
- :on-suggestion-click (fn [suggestion-text] ...)
+ ;; function to call when a suggestion is clicked.
+ ;; 'suggestion' is the exact map that was selected as provided in
+ ;; 'search-suggestions'.
+ :on-suggestion-click (fn [suggestion] ...)
  :drawer-theme ;; style options for the drawer
  :search-theme ;; style options for the search box
  }
