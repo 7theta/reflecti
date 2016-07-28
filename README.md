@@ -243,17 +243,22 @@ A floating search box with suggestions as a drop down.
 ```clojure
 {:search-suggestions ;; array of maps containing all search suggestions, 
                      ;; key :display-text will be displayed in the
-                     drop down
+                     ;; drop down
+                     
  :on-search (fn [search-text] ...)
+ 
  ;; function to call when search box's clear button is pressed
  :on-clear (fn [] ...)
+ 
  ;; function to call when a suggestion is clicked
  ;;   'suggestion' is the exact map that was selected as provided in 'search-suggestions'.
  :on-suggestion-click (fn [suggestion] ...)
+ 
  ;; 'suggestions-pane' is a reagent component that can be provided to
  ;; customize the suggestions dropdown on the search-bar. If no component
  ;; is provided, a default is used.
  :suggestions-pane (fn [{:keys [suggestions on-selection]}] [:div suggestions])
+ 
  :theme ;; style options
  }
 ```
