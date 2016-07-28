@@ -8,7 +8,7 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "0.2.1"
+(defproject com.7theta/reflecti "0.3.0"
   :description "A component library based on React"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
