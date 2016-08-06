@@ -96,11 +96,11 @@
   (r/create-class
    {:reagent-render
     (fn [{:keys [suggestions
-                style
-                suggestions-menu-style
-                suggestion-style
-                on-selection
-                menu-id]}]
+                 style
+                 suggestions-menu-style
+                 suggestion-style
+                 on-selection
+                 menu-id]}]
       [mui/paper {:style (merge {:transition "none"} style)
                   :rounded false}
        [mui/menu {:id menu-id
