@@ -96,33 +96,34 @@
   (r/create-class
    {:reagent-render
     (fn [{:keys [suggestions
-                 style
-                 suggestions-menu-style
-                 suggestion-style
-                 on-selection
-                 menu-id]}]
-      [mui/paper {:style (merge {:transition "none"} style)
-                  :rounded false}
-       [mui/menu {:id menu-id
-                  :autoWidth false
-                  :disableAutoFocus true
-                  :initiallyKeyboardFocused true
-                  :style (merge {:width "100%"} suggestions-menu-style)
-                  :listStyle {:display "block" :width "100%"}}
-        (doall
-         (map-indexed
-          (fn [idx suggestion]
-            [mui/menu-item
-             {:primaryText (:display-text suggestion)
-              :disableFocusRipple true
-              :key idx
-              :onTouchTap (partial on-selection suggestion)
-              :innerDivStyle (merge {:cursor "pointer"}
-                                    {:padding-left 16
-                                     :padding-top 0
-                                     :padding-bottom 0}
-                                    suggestion-style)}])
-          suggestions))]])}))
+                style
+                suggestions-menu-style
+                suggestion-style
+                on-selection
+                menu-id]}]
+      (when (seq suggestions)
+        [mui/paper {:style (merge {:transition "none"} style)
+                    :rounded false}
+         [mui/menu {:id menu-id
+                    :autoWidth false
+                    :disableAutoFocus true
+                    :initiallyKeyboardFocused true
+                    :style (merge {:width "100%"} suggestions-menu-style)
+                    :listStyle {:display "block" :width "100%"}}
+          (doall
+           (map-indexed
+            (fn [idx suggestion]
+              [mui/menu-item
+               {:primaryText (:display-text suggestion)
+                :disableFocusRipple true
+                :key idx
+                :onTouchTap (partial on-selection suggestion)
+                :innerDivStyle (merge {:cursor "pointer"}
+                                      {:padding-left 16
+                                       :padding-top 0
+                                       :padding-bottom 0}
+                                      suggestion-style)}])
+            suggestions))]]))}))
 
 (defn- default-search-icon
   []
@@ -246,7 +247,8 @@
               focused? (= (.-activeElement js/document)
                           (.getElementById js/document text-field-id))
               show-suggestions? (or force-show-suggestions
-                                    (and show-suggestions (not-empty text)))
+                                    (and show-suggestions
+                                         (not-empty text)))
               icon-fill (if (and text-field-focus focused? (not-empty text))
                           active-color
                           inactive-color)
