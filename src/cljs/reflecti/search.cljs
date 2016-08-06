@@ -11,6 +11,7 @@
 (ns reflecti.search
   (:require [reflecti.themes :as themes]
             [reagent.core :as r]
+            [utilis.fn :refer [fsafe]]
             [cljsjs.material-ui]
             [cljs-react-material-ui.reagent :as mui]
             [cljs-react-material-ui.core :as ui]
@@ -38,8 +39,10 @@
             icons-layout
             style
             search-bar-style
+            close-click-away
             theme]
-     :or {theme themes/light-theme}
+     :or {theme themes/light-theme
+          close-click-away true}
      :as custom-opts}]
    (let [default-style {:width 400
                         :height 48
@@ -55,7 +58,7 @@
                                     :suggestions search-suggestions
                                     :on-selection (fn [_] )
                                     :theme theme
-                                    :close-click-away true
+                                    :close-click-away close-click-away
                                     :search-fn on-search
                                     :clear-fn on-clear
                                     :suggestion-fn on-suggestion-click
@@ -63,7 +66,12 @@
                                     :style (merge {:box-shadow "none"}
                                                   search-bar-style)}
                                    (select-keys custom-opts
-                                                [:text-field-hint-style
+                                                [:on-focus
+                                                 :on-blur
+                                                 :search-icon
+                                                 :clear-icon
+                                                 :force-show-suggestions
+                                                 :text-field-hint-style
                                                  :text-field-input-style
                                                  :text-field-style
                                                  :horizontal-divider-style
@@ -93,30 +101,31 @@
                 suggestion-style
                 on-selection
                 menu-id]}]
-      [mui/paper {:style (merge {:transition "none"} style)
-                  :rounded false}
-       [mui/menu {:id menu-id
-                  :autoWidth false
-                  :disableAutoFocus true
-                  :initiallyKeyboardFocused true
-                  :style (merge {:width "100%"} suggestions-menu-style)
-                  :listStyle {:display "block" :width "100%"}}
-        (doall
-         (map-indexed
-          (fn [idx suggestion]
-            [mui/menu-item
-             {:primaryText (:display-text suggestion)
-              :disableFocusRipple true
-              :key idx
-              :onTouchTap (partial on-selection suggestion)
-              :innerDivStyle (merge {:cursor "pointer"}
-                                    {:padding-left 16
-                                     :padding-top 0
-                                     :padding-bottom 0}
-                                    suggestion-style)}])
-          suggestions))]])}))
+      (when (seq suggestions)
+        [mui/paper {:style (merge {:transition "none"} style)
+                    :rounded false}
+         [mui/menu {:id menu-id
+                    :autoWidth false
+                    :disableAutoFocus true
+                    :initiallyKeyboardFocused true
+                    :style (merge {:width "100%"} suggestions-menu-style)
+                    :listStyle {:display "block" :width "100%"}}
+          (doall
+           (map-indexed
+            (fn [idx suggestion]
+              [mui/menu-item
+               {:primaryText (:display-text suggestion)
+                :disableFocusRipple true
+                :key idx
+                :onTouchTap (partial on-selection suggestion)
+                :innerDivStyle (merge {:cursor "pointer"}
+                                      {:padding-left 16
+                                       :padding-top 0
+                                       :padding-bottom 0}
+                                      suggestion-style)}])
+            suggestions))]]))}))
 
-(defn- search-icon
+(defn- default-search-icon
   []
   (let [default-icon-style {:margin "auto" :width 48}
         default-color "#D3D3D3"]
@@ -133,7 +142,7 @@
           :onMouseOver (fn [_] (r/set-state this {:hover? true}))
           :onMouseOut (fn [_] (r/set-state this {:hover? false}))}]))))
 
-(defn- clear-icon
+(defn- default-clear-icon
   []
   (let [default-icon-style {:margin "auto" :width 48}
         default-color "#D3D3D3"]
@@ -180,14 +189,19 @@
 
                   max-suggestions
                   suggestions
-
+                  force-show-suggestions
                   suggestions-pane
-
                   suggestion-fn
+
                   search-fn
+                  search-icon
+
                   clear-fn
+                  clear-icon
 
                   on-selection
+                  on-focus
+                  on-blur
                   close-click-away
 
                   id
@@ -232,7 +246,9 @@
                                  suggestions))
               focused? (= (.-activeElement js/document)
                           (.getElementById js/document text-field-id))
-              show-suggestions? (and show-suggestions (not-empty text))
+              show-suggestions? (or force-show-suggestions
+                                    (and show-suggestions
+                                         (not-empty text)))
               icon-fill (if (and text-field-focus focused? (not-empty text))
                           active-color
                           inactive-color)
@@ -245,7 +261,7 @@
               default-text-field-style {:padding-left (if (= icons-layout :right) 16 0)}
               icon-style (when (not-empty text) {:cursor "pointer"})
               search-icon (fn []
-                            [search-icon
+                            [(or search-icon default-search-icon)
                              {:hover-color (or (and show-suggestions?
                                                     active-color)
                                                icon-fill)
@@ -256,7 +272,7 @@
                                                 (search-fn (:display-text suggestion))
                                                 (selection-handler suggestion)))}])
               clear-icon (fn []
-                           [clear-icon
+                           [(or clear-icon default-clear-icon)
                             {:hover-color (or (and show-suggestions?
                                                    active-color)
                                               icon-fill)
@@ -326,7 +342,9 @@
                                                nil)))
                               :onFocus (fn [e]
                                          (r/set-state this {:text-field-focus true
-                                                            :show-suggestions true}))
+                                                            :show-suggestions true})
+                                         ((fsafe on-focus)))
+                              :onBlur (fn [_] ((fsafe on-blur)))
                               :onChange (fn [event search-text]
                                           (if search-text
                                             (when search-fn (search-fn search-text))
