@@ -10,5 +10,5 @@
     http://fontawesome.io/examples/"
   [{:keys [type classes] :as props}]
   [:i (merge
-       {:class (str "fa fa-" type (st/join " " classes))}
+       {:class (str "fa fa-" type " " (st/join " " classes))}
        (dissoc props :type :classes))])

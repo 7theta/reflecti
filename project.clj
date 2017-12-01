@@ -8,23 +8,23 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "1.0.0"
+(defproject com.7theta/reflecti "1.1.0"
   :description "A library of reagent components"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[reagent "0.7.0"]
-                 [cljsjs/antd "2.12.3-0"
+                 [cljsjs/antd "2.13.4-0"
                   :exclusions [cljsjs/react cljsjs/react-dom]]]
   :source-paths ["src/cljs"]
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
   :profiles {:dev {:source-paths ["dev"]
                    :plugins [[lein-cljsbuild "1.1.7"]
-                             [lein-figwheel "0.5.13"]]
+                             [lein-figwheel "0.5.14"]]
                    :dependencies [[org.clojure/clojure "1.8.0"]
                                   [org.clojure/clojurescript "1.9.908"]
                                   [ns-tracker "0.3.1"]
-                                  [figwheel-sidecar "0.5.13"]
+                                  [figwheel-sidecar "0.5.14"]
                                   [com.cemerick/piggieback "0.2.2"]]}}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :cljsbuild {:builds [{:id "dev"

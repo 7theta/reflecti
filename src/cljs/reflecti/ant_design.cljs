@@ -628,6 +628,10 @@
 
 ;; -
 
+(def locales
+  "https://ant.design/components/locale-provider/"
+  (.-locales js/window.antd))
+
 (def locale-provider
   "https://ant.design/components/locale-provider/"
-  (adapt-react-class js/antd.LocaleProvider))
+  (adapt-react-class (.-LocaleProvider js/window.antd)))
