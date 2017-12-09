@@ -1,5 +1,6 @@
 (ns reflecti.ant-design
   (:require [reagent.core :refer [adapt-react-class as-element]]
+            [cljsjs.moment]
             [cljsjs.antd]))
 
 ;;;
@@ -295,28 +296,52 @@
             {:unCheckedChildren (cond-> un-checked-children
                                   (not (string? un-checked-children)) as-element)}))])
 
-;; TODO: Add TreeSelect
+;; -
+
+(def tree-select
+  "https://ant.design/components/tree-select/"
+  (adapt-react-class js/antd.TreeSelect))
+
+;; -
 
 (def time-picker
   "https://ant.design/components/time-picker/"
   (adapt-react-class js/antd.TimePicker))
 
-;; TODO: Add Transfer
+;; -
 
-;; TODO: Add Upload
+(def transfer
+  "https://ant.design/components/transfer/"
+  (adapt-react-class js/antd.Transfer))
+
+;; -
+
+(def upload
+  "https://ant.design/components/upload/"
+  (adapt-react-class js/antd.Upload))
 
 
 ;;;
 ;;; Data Display
 ;;;
 
-(def avatar (adapt-react-class js/antd.Avatar))
+(def avatar
+  "https://ant.design/components/avatar/"
+  (adapt-react-class js/antd.Avatar))
 
 ;; -
 
-(def badge (adapt-react-class js/antd.Badge))
+(def badge
+  "https://ant.design/components/badge/"
+  (adapt-react-class js/antd.Badge))
 
-;; TODO: Add Calendar
+;; -
+
+(def calendar
+  "https://ant.design/components/calendar/"
+  (adapt-react-class js/antd.Calendar))
+
+;; -
 
 (defn card
   "https://ant.design/components/card/#Card"
@@ -358,6 +383,12 @@
              {:header (cond-> header
                         (not (string? header)) as-element)}))]
    children))
+
+;; -
+
+(def list
+  "https://ant.design/components/list/"
+  (adapt-react-class js/antd.List))
 
 ;; -
 
@@ -625,6 +656,12 @@
 (def back-top
   "https://ant.design/components/back-top/"
   (adapt-react-class js/antd.BackTop))
+
+;; -
+
+(def divider
+  "https://ant.design/components/divider/"
+  (adapt-react-class js/antd.Divider))
 
 ;; -
 

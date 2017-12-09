@@ -8,14 +8,15 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "1.1.1"
+(defproject com.7theta/reflecti "1.1.2"
   :description "A library of reagent components"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[reagent "0.7.0"]
                  [cljsjs/antd "3.0.0-0"
-                  :exclusions [cljsjs/react cljsjs/react-dom]]]
+                  :exclusions [cljsjs/react cljsjs/react-dom]]
+                 [cljsjs/moment "2.17.1-1"]]
   :source-paths ["src/cljs"]
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
   :profiles {:dev {:source-paths ["dev"]
