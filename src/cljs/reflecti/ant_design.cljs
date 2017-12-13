@@ -1,4 +1,5 @@
 (ns reflecti.ant-design
+  (:refer-clojure :exclude [list])
   (:require [reagent.core :refer [adapt-react-class as-element]]
             [cljsjs.moment]
             [cljsjs.antd]))

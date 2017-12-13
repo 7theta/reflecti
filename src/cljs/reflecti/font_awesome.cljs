@@ -8,7 +8,9 @@
   Additional configuration of Font Awesome icons is possible
   by passing a seq of strings. Examples can be found at:
     http://fontawesome.io/examples/"
-  [{:keys [type classes] :as props}]
+  [{:keys [name type classes] :or {type :regular} :as props}]
+  {:pre [(#{:solid :regular :light :brands} type)]}
   [:i (merge
-       {:class (str "fa fa-" type " " (st/join " " classes))}
-       (dissoc props :type :classes))])
+       {:class (str (->> type clojure.core/name first (str "fa"))
+                    " fa-" name " " (st/join " " classes))}
+       (dissoc props :type :name :classes))])
