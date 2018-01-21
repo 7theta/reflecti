@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [list])
   (:require [reagent.core :refer [adapt-react-class as-element]]
             [cljsjs.moment]
-            [cljsjs.antd]))
+            [cljsjs.antd]
+            [inflections.core :refer [camel-case-keys]]))
 
 ;;;
 ;;; General
@@ -82,28 +83,23 @@
 
 (defn dropdown
   "https://ant.design/components/dropdown/#Dropdown"
-  [props]
-  [(adapt-react-class js/antd.Dropdown)
-   (update props :overlay as-element)])
+  [props & children]
+  (into [(adapt-react-class js/antd.Dropdown)
+         (update props :overlay as-element)]
+        children))
 
 (defn dropdown-button
   "https://ant.design/components/dropdown/#Dropdown.Button"
-  [props]
-  [(adapt-react-class js/antd.Dropdown.Button)
-   (update props :overlay as-element)])
+  [props & children]
+  (into [(adapt-react-class js/antd.Dropdown.Button)
+         (update props :overlay as-element)]
+        children))
 
 ;; -
 
-(defn menu
+(def menu
   "https://ant.design/components/menu/#Menu"
-  [props & children]
-  (into
-   [(adapt-react-class js/antd.Menu)
-    (-> props
-        (update :default-open-keys clj->js)
-        (update :default-selected-keys clj->js)
-        (update :selected-keys clj->js))]
-   children))
+  (adapt-react-class js/antd.Menu))
 
 (def menu-item
   "https://ant.design/components/menu/#Menu.Item"
@@ -358,6 +354,10 @@
                        (not (string? extra)) as-element)}))]
    children))
 
+(def card-meta
+  "https://ant.design/components/card/"
+  (adapt-react-class js/antd.Card.Meta))
+
 (def card-grid
   "https://ant.design/components/card/#Card.Grid"
   (adapt-react-class js/antd.Card.Grid))
@@ -390,6 +390,14 @@
 (def list
   "https://ant.design/components/list/"
   (adapt-react-class js/antd.List))
+
+(def list-item
+  "https://ant.design/components/list/"
+  (adapt-react-class js/antd.List.Item))
+
+(def list-item-meta
+  "https://ant.design/components/list/"
+  (adapt-react-class js/antd.List.Item.Meta))
 
 ;; -
 
@@ -446,27 +454,13 @@
 
 ;; -
 
-(defn tabs
+(def tabs
   "https://ant.design/components/tabs/#Tabs"
-  [{:keys [tab-bar-extra-content] :as props} & children]
-  (into
-   [(adapt-react-class js/antd.Tabs)
-    (merge props
-           (when tab-bar-extra-content
-             {:tabBarExtraContent (cond-> tab-bar-extra-content
-                                    (not (string? tab-bar-extra-content)) as-element)}))]
-   children))
+  (adapt-react-class js/antd.Tabs))
 
-(defn tab-pane
+(def tab-pane
   "https://ant.design/components/tabs/#Tabs.TabPane"
-  [{:keys [tab] :as props} & children]
-  (into
-   [(adapt-react-class js/antd.Tabs.TabPane)
-    (merge props
-           (when tab
-             {:tab (cond-> tab
-                     (not (string? tab)) as-element)}))]
-   children))
+  (adapt-react-class js/antd.Tabs.TabPane))
 
 ;; -
 
@@ -551,6 +545,46 @@
              {:footer (cond-> footer
                         (not (string? footer)) as-element)}))]
    children))
+
+(defn modal-info
+  [props]
+  "https://ant.design/components/modal/#Modal.method()"
+  (.info js/antd.Modal
+         (clj->js
+          (cond-> (camel-case-keys props :lower)
+            (not (string? (:content props))) (update :content as-element)))))
+
+(defn modal-success
+  [props]
+  "https://ant.design/components/modal/#Modal.method()"
+  (.success js/antd.Modal
+            (clj->js
+             (cond-> (camel-case-keys props :lower)
+               (not (string? (:content props))) (update :content as-element)))))
+
+(defn modal-error
+  [props]
+  "https://ant.design/components/modal/#Modal.method()"
+  (.error js/antd.Modal
+          (clj->js
+           (cond-> (camel-case-keys props :lower)
+             (not (string? (:content props))) (update :content as-element)))))
+
+(defn modal-warning
+  [props]
+  "https://ant.design/components/modal/#Modal.method()"
+  (.warning js/antd.Modal
+            (clj->js
+             (cond-> (camel-case-keys props :lower)
+               (not (string? (:content props))) (update :content as-element)))))
+
+(defn modal-confirm
+  [props]
+  "https://ant.design/components/modal/#Modal.method()"
+  (.confirm js/antd.Modal
+            (clj->js
+             (cond-> (camel-case-keys props :lower)
+               (not (string? (:content props))) (update :content as-element)))))
 
 ;; -
 
