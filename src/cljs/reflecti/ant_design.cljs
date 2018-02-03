@@ -252,6 +252,10 @@
   "https://ant.design/components/radio/#RadioGroup"
   (adapt-react-class js/antd.Radio.Group))
 
+(def radio-button
+  "https://ant.design/components/radio/#RadioButton"
+  (adapt-react-class js/antd.Radio.Button))
+
 ;; -
 
 (defn select
