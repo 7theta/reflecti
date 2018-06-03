@@ -378,16 +378,9 @@
   "https://ant.design/components/collapse/#Collapse"
   (adapt-react-class js/antd.Collapse))
 
-(defn collapse-panel
+(def collapse-panel
   "https://ant.design/components/collapse/#Collapse.Panel"
-  [{:keys [header] :as props} & children]
-  (into
-   [(adapt-react-class js/antd.Collapse.Panel)
-    (merge props
-           (when header
-             {:header (cond-> header
-                        (not (string? header)) as-element)}))]
-   children))
+  (adapt-react-class js/antd.Collapse.Panel))
 
 ;; -
 
@@ -478,25 +471,13 @@
 
 ;; -
 
-(defn timeline
+(def timeline
   "https://ant.design/components/timeline/#Timeline"
-  [{:keys [pending] :as props} & children]
-  (into
-   [(adapt-react-class js/antd.Timeline)
-    (merge props
-           (when pending
-             {:pending (cond-> pending
-                         (or (not (string? pending))
-                             (not (boolean? pending))) as-element)}))]
-   children))
+  (adapt-react-class js/antd.Timeline))
 
-(defn timeline-item
+(def timeline-item
   "https://ant.design/components/timeline/#Timeline.Item"
-  [{:keys [dot] :as props} & children]
-  (into
-   [(adapt-react-class js/antd.Timeline.Item)
-    (merge props (when dot {:dot (cond-> dot (not (string? dot)) as-element)}))]
-   children))
+  (adapt-react-class js/antd.Timeline.Item))
 
 ;; -
 
@@ -504,16 +485,9 @@
   "https://ant.design/components/tree/#Tree-props"
   (adapt-react-class js/antd.Tree))
 
-(defn tree-node
+(def tree-node
   "https://ant.design/components/tree/#TreeNode-props"
-  [{:keys [title] :as props} & children]
-  (into
-   [(adapt-react-class js/antd.Tree.TreeNode)
-    (merge props
-           (when title
-             {:title (cond-> title
-                       (not (string? title)) as-element)}))]
-   children))
+  (adapt-react-class js/antd.Tree.TreeNode))
 
 ;;;
 ;;; Feedback
