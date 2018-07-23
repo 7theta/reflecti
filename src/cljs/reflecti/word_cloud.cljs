@@ -7,9 +7,9 @@
 (def ^:private d3 js/d3)
 (def ^:private d3-cloud (.. d3 -layout -cloud))
 
-(def scale-linear (.. d3 -scale -linear))
-(def scale-log (.. d3 -scale -log))
-(def scale-sqrt (.. d3 -scale -sqrt))
+(def scale-linear (.scaleLinear d3))
+(def scale-log (.scaleLog d3))
+(def scale-sqrt (.scaleSqrt d3))
 
 (def scale-lookup
   {:linear scale-linear
@@ -63,11 +63,18 @@
       true (.attr "width" width)
       true (.attr "height" height)
       true (.append "g")
-      cloud-transform (.attr "transform" cloud-transform)
+      cloud-transform (.attr "transform" (if (and width height)
+                                           (str "translate("
+                                                (/ width 2)
+                                                ","
+                                                (/ height 2)
+                                                ")")
+                                           cloud-transform))
       true (.selectAll "text")
       true (.data words)
       true (.enter)
       true (.append "text")
+      true (.style "fill" "#666")
       true (.style "font-size" (fn [d] (str (.-size d) "px")))
       font-family (.style "font-family" font-family)
       text-anchor (.attr "text-anchor" text-anchor)
@@ -95,7 +102,7 @@
 
                 (keyword? scale)
                 (when-let [f (scale-lookup scale)]
-                  (-> (f)
+                  (-> f
                       (.domain (clj->js scale-domain))
                       (.range (clj->js scale-range))))
 
