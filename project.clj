@@ -8,7 +8,7 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "1.7.2"
+(defproject com.7theta/reflecti "1.7.4"
   :description "A library of reagent components"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
@@ -18,7 +18,7 @@
                                cljsjs/react-dom-server]]
                  [cljsjs/react-dom "16.4.1-0"]
                  [cljsjs/react "16.4.1-0"]
-                 [cljsjs/antd "3.7.1-0"]
+                 [cljsjs/antd "3.9.1-0"]
                  [cljsjs/moment "2.22.2-0"]
                  [cljsjs/draft-js "0.10.5-0"]
                  [cljsjs/d3 "4.12.0-0"]
