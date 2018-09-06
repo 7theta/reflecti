@@ -508,6 +508,10 @@
             {:description (cond-> description
                             (not (string? description)) as-element)}))])
 
+(def drawer
+  "https://ant.design/components/drawer/"
+  (adapt-react-class js/antd.Drawer))
+
 ;; -
 
 (defn modal
