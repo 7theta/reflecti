@@ -8,7 +8,7 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "1.7.4"
+(defproject com.7theta/reflecti "1.8.0"
   :description "A library of reagent components"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
@@ -16,15 +16,15 @@
   :dependencies [[reagent "0.8.1"
                   :exclusions [cljsjs/react cljsjs/react-dom
                                cljsjs/react-dom-server]]
-                 [cljsjs/react-dom "16.4.1-0"]
-                 [cljsjs/react "16.4.1-0"]
-                 [cljsjs/antd "3.9.1-0"]
-                 [cljsjs/moment "2.22.2-0"]
+                 [cljsjs/react-dom "16.6.0-0"]
+                 [cljsjs/react "16.6.0-0"]
+                 [cljsjs/antd "3.12.0-0"]
+                 [cljsjs/moment "2.22.2-2"]
                  [cljsjs/draft-js "0.10.5-0"]
-                 [cljsjs/d3 "4.12.0-0"]
+                 [cljsjs/d3 "5.7.0-0"]
                  [cljsjs/d3-cloud "1.2.1-0"]
-                 [cljsjs/recharts "1.0.0-beta.10-3"]
-                 [com.7theta/utilis "1.1.0"]
+                 [cljsjs/recharts "1.4.2-0"]
+                 [com.7theta/utilis "1.2.0"]
                  [inflections "0.13.0"]]
   :source-paths ["src/cljs"]
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
@@ -32,23 +32,23 @@
                    :resource-paths ["example/resources"]
                    :plugins [[lein-cljsbuild "1.1.7"]
                              [lein-figwheel "0.5.15"]]
-                   :dependencies [[org.clojure/clojure "1.9.0"]
-                                  [org.clojure/clojurescript "1.10.339"]
+                   :dependencies [[org.clojure/clojure "1.10.0"]
+                                  [org.clojure/clojurescript "1.10.439"]
 
-                                  [ring/ring-core "1.6.3" :exclusions [ring/ring-codec]]
+                                  [ring/ring-core "1.7.1" :exclusions [ring/ring-codec]]
                                   [ring/ring-defaults "0.3.2"]
                                   [ring/ring-anti-forgery "1.3.0"]
 
                                   [com.cemerick/piggieback "0.2.2"]
                                   [binaryage/devtools "0.9.10"]
 
-                                  [integrant "0.6.3"]
+                                  [integrant "0.7.0"]
                                   [integrant/repl "0.3.1"]
 
                                   [compojure "1.6.1"]
                                   [ns-tracker "0.3.1"]
-                                  [figwheel-sidecar "0.5.16"]
-                                  [re-frame "0.10.5"]]}}
+                                  [figwheel-sidecar "0.5.18"]
+                                  [re-frame "0.10.6"]]}}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs" "example/src/cljs"]
