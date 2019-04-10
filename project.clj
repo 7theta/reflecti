@@ -8,7 +8,7 @@
 ;;   the terms of this license.
 ;;   You must not remove this notice, or any others, from this software.
 
-(defproject com.7theta/reflecti "1.9.0"
+(defproject com.7theta/reflecti "1.10.0"
   :description "A library of reagent components"
   :url "https://github.com7theta/reflecti"
   :license {:name "Eclipse Public License"
@@ -25,8 +25,9 @@
                  [cljsjs/d3-cloud "1.2.1-0"]
                  [cljsjs/recharts "1.4.2-0"]
                  [com.7theta/utilis "1.2.0"]
+                 [metosin/spec-tools "0.9.1"]
                  [inflections "0.13.2"]]
-  :source-paths ["src/cljs"]
+  :source-paths ["src/cljs" "src/cljc"]
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
   :profiles {:dev {:source-paths ["dev" ]
                    :resource-paths ["example/resources"]
@@ -39,7 +40,7 @@
                                   [ring/ring-defaults "0.3.2"]
                                   [ring/ring-anti-forgery "1.3.0"]
 
-                                  [com.cemerick/piggieback "0.2.2"]
+                                  [cider/piggieback "0.4.0"]
                                   [binaryage/devtools "0.9.10"]
 
                                   [integrant "0.7.0"]
@@ -49,9 +50,9 @@
                                   [ns-tracker "0.3.1"]
                                   [figwheel-sidecar "0.5.18"]
                                   [re-frame "0.10.6"]]}}
-  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+  :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
   :cljsbuild {:builds [{:id "dev"
-                        :source-paths ["src/cljs" "example/src/cljs"]
+                        :source-paths ["src/cljs" "src/cljc" "example/src/cljs"]
                         :figwheel {:on-jsload "example.core/mount-root"}
                         :compiler {:main example.core
                                    :output-to "example/resources/public/js/compiled/app.js"

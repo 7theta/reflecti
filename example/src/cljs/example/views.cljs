@@ -1,8 +1,31 @@
 (ns example.views
   (:require [re-frame.core :refer [subscribe dispatch]]
+            [reflecti.formal :as formal]
+            [reflecti.formal.ui.basic :as formal-basic]
+            [reflecti.formal.ui.antd :as formal-antd]
             [reagent.core :refer [create-class]]
             [reflecti.word-cloud :refer [cloud]]
+            [cljs.spec.alpha :as s]
             [clojure.string :as st]))
+
+(s/def :reflecti-formal-example/a string?)
+(s/def :reflecti-formal-example/b integer?)
+(s/def :reflecti-formal-example-d/a string?)
+
+(s/def :reflecti-formal-example/d
+  (s/keys
+   :req-un
+   [:reflecti-formal-example-d/a]))
+
+(s/def :reflecti-formal-example/c
+  (s/coll-of :reflecti-formal-example/d :min-count 1))
+
+(s/def :reflecti/formal-example
+  (s/keys
+   :req-un
+   [:reflecti-formal-example/a
+    :reflecti-formal-example/b
+    :reflecti-formal-example/c]))
 
 (def sample-text
   "How the Word Cloud Generator Works
@@ -58,24 +81,37 @@
     (fn []
       [:div
 
-       [:button
-        {:on-click change-text}
-        "Change Words"]
+       ;;; Formal
+       [:div {:style {:padding 25}}
+        [:h1 "Forms Demo"]
+        [:div {:style {:width 200}}
+         [formal-antd/input
+          {:spec :reflecti/formal-example
+           :reflecti-formal-example/b {:default-value 0}}]]]
 
-       [:div
+       ;;; Cloud
+       [:div {:style {:padding 25}}
 
-        [cloud
-         {:words (frequencies @(subscribe [:example/words]))
-          :width 600
-          :height 600
-          :scale :linear
-          :scale-range [10 20]}]
+        [:h1 "Cloud Demo"]
 
-        [cloud
-         {:words @(subscribe [:example/words])
-          :width 600
-          :height 600
-          :scale (fn [domain range]
-                   (fn [occurrences]
-                     (* occurrences 10)))
-          :scale-range [10 20]}]]])}))
+        [:button
+         {:on-click change-text}
+         "Change Words"]
+
+        [:div
+
+         [cloud
+          {:words (frequencies @(subscribe [:example/words]))
+           :width 600
+           :height 600
+           :scale :linear
+           :scale-range [10 20]}]
+
+         [cloud
+          {:words @(subscribe [:example/words])
+           :width 600
+           :height 600
+           :scale (fn [domain range]
+                    (fn [occurrences]
+                      (* occurrences 10)))
+           :scale-range [10 20]}]]]])}))
