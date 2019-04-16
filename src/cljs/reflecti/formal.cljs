@@ -69,7 +69,7 @@
   "
   []
   (let [form-state (r/atom nil)
-        deferred (r/atom {})]
+        form-valid? (r/atom nil)]
     (fn [{:keys [spec ui]
          :or {ui :antd}
          :as props}]
@@ -83,8 +83,8 @@
           (-> props
               (dissoc :ui)
               (assoc ::form-state form-state
-                     ::ui ui
-                     ::deferred deferred)
+                     ::form-valid? form-valid?
+                     ::ui ui)
               (merge (spec-id->map spec)))]]))))
 
 ;;; Prop Utilities
@@ -112,10 +112,6 @@
   [props]
   (:style (spec-props props)))
 
-(defn deferred
-  [props]
-  @(::deferred props))
-
 (defn value
   [{::keys [form-state path spec-id]}]
   (when form-state
@@ -142,7 +138,7 @@
 
 (defn valid?
   [{::keys [spec spec-id] :as props}]
-  (try (binding [*deferred* (deferred props)]
+  (try (binding [*deferred* {spec-id (resolve-deferred-spec props)}]
          (s/valid? spec (value props)))
        (catch js/Error e
          (js/console.error e (str "Error evaluating spec: " spec-id))
@@ -256,27 +252,34 @@
 
 (defn- input*
   []
-  (r/create-class
-   {:component-will-mount
-    (fn [this]
-      (let [{::keys [spec-id spec spec-key children form-state] :as props} (r/props this)]
-        (when (not (#{:clojure.spec.alpha/keys
-                      :spec-tools.visitor/vector-of} spec-key))
-          (swap!
-           form-state assoc-in (path props)
-           (r/atom
-            (if (and (map? props)
-                     (contains? props spec-id)
-                     (contains? (get props spec-id) :default-value))
-              (default-value props)
-              ::none))))))
-    :reagent-render
-    (fn [props]
-      (when (keyword? (::spec-id props))
-        [spec->input
-         (-> props
-             (assoc ::path (path props))
-             (dissoc :key))]))}))
+  (let [xform-props (fn [props]
+                      (-> props
+                          (assoc ::path (path props))
+                          (dissoc :key)))]
+    (r/create-class
+     {:component-will-mount
+      (fn [this]
+        (let [{::keys [spec-id spec spec-key children form-state] :as props} (r/props this)]
+          (when (not (#{:clojure.spec.alpha/keys
+                        :spec-tools.visitor/vector-of} spec-key))
+            (swap!
+             form-state assoc-in (path props)
+             (r/atom
+              (if (and (map? props)
+                       (contains? props spec-id)
+                       (contains? (get props spec-id) :default-value))
+                (default-value props)
+                ::none))))))
+      :component-will-update
+      (fn [_ [_ new-props]]
+        (let [props (xform-props new-props)]
+          (if (or (::required? props) (has-value? props))
+            (swap! (::form-valid? props) assoc (path props) (valid? props))
+            (swap! (::form-valid? props) dissoc (path props)))))
+      :reagent-render
+      (fn [props]
+        (when (keyword? (::spec-id props))
+          [spec->input (xform-props props)]))})))
 
 (defn make-literal [a]
   (-> a
@@ -345,12 +348,11 @@
                       doall)
         container (get-in props [spec-id :container])
         component (ui-component-for-key ui :formal/keys)
-        [submit? on-submit] (binding [*deferred* (deferred props)]
-                              (let [value (get-in @form-state path)
-                                    _ (->> value ratoms (map deref) doall)
-                                    flattened-value (flatten-state value)]
-                                [(s/valid? spec flattened-value)
-                                 (fn [] ((fsafe (:on-add props)) spec-id flattened-value))]))]
+        submit? (->> @(::form-valid? props) vals (every? true?))
+        on-submit (fn []
+                    (->> (get-in @form-state path)
+                         (flatten-state)
+                         ((fsafe (:on-add props)) spec-id)))]
     (into
      [component
       (merge props
@@ -475,7 +477,6 @@
   [{::keys [spec-id deferred] :as props}]
   (let [spec (resolve-deferred-spec props)
         spec-keyword (spec->keyword (normalize-spec-symbol spec))]
-    (swap! deferred assoc spec-id spec)
     (if (= spec-keyword :reflecti.formal.spec/deferred)
       (let [msg (str "Recursive deferred value detected [spec-id='" spec-id "']."
                      " Deferred values must be realized at render time.")]
@@ -535,7 +536,8 @@
                     (merge
                      (dissoc props ::children)
                      (first children)
-                     {::count (count values)
+                     {:key (str "value/" id)
+                      ::count (count values)
                       ::hide-submit? true
                       ::delete? true
                       ::on-delete (fn []
@@ -547,8 +549,7 @@
                                                     [idx value]))
                                                  (into {})))
                                     (r/set-state this {::values (drop-nth idx values)}))
-                      ::path (conj (vec (::path props)) idx)}
-                     {:key (str "value/" id)})]))
+                      ::path (conj (vec (::path props)) idx)})]))
                 doall
                 xform-children))]]))}))
 
@@ -572,7 +573,7 @@
               :default-value (value props)
               :on-focus (fn [] (r/set-state this {:blur? false}))
               :on-blur (fn [] (r/set-state this {:blur? true}))
-              :on-change (on-input-change props #(when (not (empty? %)) %))
+              :on-change (on-input-change props #(if (empty? %) ::none %))
               :style (style props)}})]))
 
 (defmethod spec->input :clojure.core/integer?
@@ -702,6 +703,7 @@
 
 (defn- resolve-deferred-spec
   [{::keys [spec-id] :as props}]
-  (let [spec-xform (or (get-in props [spec-id :spec-xform])
-                       (constantly (get-in props [spec-id :spec])))]
+  (when-let [spec-xform (or (get-in props [spec-id :spec-xform])
+                            (when-let [spec (get-in props [spec-id :spec])]
+                              (constantly spec)))]
     (spec-xform props)))

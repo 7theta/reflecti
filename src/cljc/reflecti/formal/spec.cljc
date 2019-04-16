@@ -14,7 +14,7 @@
        "A key must be provided to the deferred spec"
        {:k k})))
    (fn deferred
-     ([] (get *deferred* k))
+     ([] (or (get *deferred* k) any?))
      ([x]
       (boolean
        (when-let [spec (deferred)]
