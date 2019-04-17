@@ -1,12 +1,18 @@
 (ns example.views
   (:require [re-frame.core :refer [subscribe dispatch]]
+
             [reflecti.formal :as formal]
-            [reflecti.formal.ui.basic :as formal-basic]
             [reflecti.formal.ui.antd :as formal-antd]
-            [reagent.core :refer [create-class]]
+
             [reflecti.word-cloud :refer [cloud]]
+
+            [reflecti.video :as video]
+
+            [reagent.core :refer [create-class]]
             [cljs.spec.alpha :as s]
             [clojure.string :as st]))
+
+;;; Formal Demo
 
 (s/def :reflecti-formal-example/a string?)
 (s/def :reflecti-formal-example/b integer?)
@@ -26,6 +32,17 @@
    [:reflecti-formal-example/a
     :reflecti-formal-example/b
     :reflecti-formal-example/c]))
+
+(defn forms-demo
+  []
+  [:div {:style {:padding 25}}
+   [:h1 "Forms Demo"]
+   [:div {:style {:width 200}}
+    [formal-antd/input
+     {:spec :reflecti/formal-example
+      :reflecti-formal-example/b {:default-value 0}}]]])
+
+;;; Word Cloud Demo
 
 (def sample-text
   "How the Word Cloud Generator Works
@@ -70,48 +87,54 @@
          (repeatedly)
          (take 10))]))
 
+(defn word-cloud-demo
+  []
+  (dispatch
+   [:example/words-updated
+    split-sample-text])
+  (fn []
+    [:div {:style {:padding 25}}
+
+     [:h1 "Cloud Demo"]
+
+     [:button
+      {:on-click change-text}
+      "Change Words"]
+
+     [:div
+
+      [cloud
+       {:words (frequencies @(subscribe [:example/words]))
+        :width 600
+        :height 600
+        :scale :linear
+        :scale-range [10 20]}]
+
+      [cloud
+       {:words @(subscribe [:example/words])
+        :width 600
+        :height 600
+        :scale (fn [domain range]
+                 (fn [occurrences]
+                   (* occurrences 10)))
+        :scale-range [10 20]}]]]))
+
+;;; Video Player
+
+(defn video-demo
+  []
+  [:div {:style {:width 640
+                 :display "flex"
+                 :flex-direction "row"
+                 :justify-content "center"}}
+   [video/player
+    {:url "https://www.youtube.com/watch?v=rI8tNMsozo0"}]])
+
+;;; Main
+
 (defn main-panel
   []
-  (create-class
-   {:component-did-mount
-    (fn [] (dispatch
-           [:example/words-updated
-            split-sample-text]))
-    :reagent-render
-    (fn []
-      [:div
-
-       ;;; Formal
-       [:div {:style {:padding 25}}
-        [:h1 "Forms Demo"]
-        [:div {:style {:width 200}}
-         [formal-antd/input
-          {:spec :reflecti/formal-example
-           :reflecti-formal-example/b {:default-value 0}}]]]
-
-       ;;; Cloud
-       [:div {:style {:padding 25}}
-
-        [:h1 "Cloud Demo"]
-
-        [:button
-         {:on-click change-text}
-         "Change Words"]
-
-        [:div
-
-         [cloud
-          {:words (frequencies @(subscribe [:example/words]))
-           :width 600
-           :height 600
-           :scale :linear
-           :scale-range [10 20]}]
-
-         [cloud
-          {:words @(subscribe [:example/words])
-           :width 600
-           :height 600
-           :scale (fn [domain range]
-                    (fn [occurrences]
-                      (* occurrences 10)))
-           :scale-range [10 20]}]]]])}))
+  [:div
+   [video-demo]
+   [forms-demo]
+   [word-cloud-demo]])

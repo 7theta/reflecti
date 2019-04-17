@@ -1,0 +1,12 @@
+.ant-slider-rail {
+  background-color: rgba(255,255,255,.4);
+}
+
+.ant-slider-handle {
+  background-color: rgb(33, 150, 243);
+  border: 2px solid rgb(33, 150, 243);
+}
+
+.ant-slider-track {
+  background-color: rgb(33, 150, 243);
+}
