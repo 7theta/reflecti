@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "antd": "^3.16.6",
+    "d3": "^5.9.2",
+    "d3-cloud": "^1.2.5",
+    "draft-js": "^0.10.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-player": "^1.11.0",
+    "recharts": "^1.5.0",
+    "screenfull": "^4.2.0"
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.8.36"
+  }
+}

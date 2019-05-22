@@ -1,22 +1,22 @@
 (ns reflecti.video
-  (:require [cljsjs.react-player]
-            [cljsjs.screenfull]
+  (:require ["react-player" :default ReactPlayer]
+            ["screenfull" :as screenfull]
+            ["react-dom" :as react-dom]
             [reflecti.ant-design :as antd]
             [reflecti.font-awesome :as fa]
             [clojure.string :as st]
             [utilis.types.number :refer [string->long]]
             [utilis.fn :refer [fsafe]]
-            [reagent.core
-             :as r
+            [reagent.core :as r
              :refer [current-component state set-state create-class
                      props adapt-react-class as-element]]
             [re-frame.core :refer [dispatch]]))
 
 ;;; Declarations
 
-(def react-player (adapt-react-class js/ReactPlayer))
+(def react-player (adapt-react-class ReactPlayer))
 
-(def find-dom-node js/ReactDOM.findDOMNode)
+(def find-dom-node react-dom/findDOMNode)
 
 (declare icon-button controls controls-wrapper format-control-tip bounding-rect
          seek-to play pause duration)
@@ -33,6 +33,8 @@
   "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==)")
 
 ;;; API
+
+(js/console.log screenfull)
 
 (defn player
   []
@@ -54,12 +56,12 @@
                                                               (:height player-size))
                                       :wrapper-size wrapper-size})))))))
         fullscreen-listener (fn []
-                              (->> js/screenfull.isFullscreen
+                              (->> screenfull/isFullscreen
                                    boolean
                                    (reset! fullscreen?)))
         resize-listener (fn [] (calc-sizes @this-atom))]
     (.addEventListener js/window "resize" resize-listener)
-    (js/screenfull.on "change" fullscreen-listener)
+    (screenfull/on "change" fullscreen-listener)
     (create-class
      {:get-initial-state
       (fn [this]
@@ -84,7 +86,7 @@
       :component-will-unmount
       (fn [this]
         (.removeEventListener js/window "resize" resize-listener)
-        (js/screenfull.off "change" fullscreen-listener))
+        (screenfull/off "change" fullscreen-listener))
       :reagent-render
       (fn [{:keys [url
                   controls
@@ -204,9 +206,9 @@
 
 (defn fullscreen
   [player]
-  (if js/screenfull.isFullscreen
-    (js/screenfull.exit)
-    (js/screenfull.request
+  (if screenfull/isFullscreen
+    (screenfull/exit)
+    (screenfull/request
      (js/document.getElementById (:id player)))))
 
 (defn controls
@@ -318,19 +320,17 @@
   [{:keys [style on-click title icon]}]
   (let [this (current-component)
         {:keys [hover?]} (state this)]
-    [:div
-     {:on-click on-click
-      :on-mouse-over (fn [] (set-state this {:hover? true}))
-      :on-mouse-out (fn [] (set-state this {:hover? false}))
-      :style
-      (merge {:cursor "pointer"
-              :height "100%"
-              :width "100%"
-              :display "flex"
-              :flex-direction "column"
-              :justify-content "center"
-              :align-items "center"}
-             style)}
+    [:div {:on-click on-click
+           :on-mouse-over (fn [] (set-state this {:hover? true}))
+           :on-mouse-out (fn [] (set-state this {:hover? false}))
+           :style (merge {:cursor "pointer"
+                          :height "100%"
+                          :width "100%"
+                          :display "flex"
+                          :flex-direction "column"
+                          :justify-content "center"
+                          :align-items "center"}
+                         style)}
      [fa/icon
       (merge
        {:type :light

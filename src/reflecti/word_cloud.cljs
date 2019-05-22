@@ -1,11 +1,9 @@
 (ns reflecti.word-cloud
-  (:require [cljsjs.d3-cloud]
+  (:require ["d3" :as d3]
+            ["d3-cloud" :as d3-cloud]
             [reagent.core :refer [create-class props]]))
 
 ;;; Declarations
-
-(def ^:private d3 js/d3)
-(def ^:private d3-cloud (.. d3 -layout -cloud))
 
 (def scale-linear (.scaleLinear d3))
 (def scale-log (.scaleLog d3))

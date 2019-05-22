@@ -15,12 +15,12 @@
             [ring.middleware.defaults :as ring-defaults]
 
             [integrant.core :as ig]
-            [com.stuartsierra.component :as component] ; Figwheel dependency
 
             [integrant.repl :refer [clear go halt init reset reset-all]]
             [integrant.repl.state :refer [system]]
 
-            [figwheel-sidecar.system :as fig]
+            [shadow.cljs.devtools.server :as server]
+            [shadow.cljs.devtools.api :as shadow]
 
             [clojure.tools.namespace.repl :refer [refresh refresh-all disable-reload!]]
             [clojure.repl :refer [apropos dir doc find-doc pst source]]
@@ -28,37 +28,37 @@
             [clojure.pprint :refer [pprint]]
             [clojure.reflect :refer [reflect]]))
 
-(defmethod ig/init-key :example/ring-handler [_ _]
-  (-> (compojure/routes
-       (GET "/" req-req (response/content-type
-                         (response/resource-response "public/index.html")
-                         "text/html"))
-       (route/resources "/"))
-      (ring-defaults/wrap-defaults ring-defaults/site-defaults)))
+;; (defmethod ig/init-key :example/ring-handler [_ _]
+;;   (-> (compojure/routes
+;;        (GET "/" req-req (response/content-type
+;;                          (response/resource-response "public/index.html")
+;;                          "text/html"))
+;;        (route/resources "/"))
+;;       (ring-defaults/wrap-defaults ring-defaults/site-defaults)))
 
-(disable-reload! (find-ns 'integrant.core))
+;; (disable-reload! (find-ns 'integrant.core))
 
-(def dev-config
-  {:figwheel {:ring-handler (ig/ref :example/ring-handler)}
-   :example/ring-handler {}})
+;; (def dev-config
+;;   {:figwheel {:ring-handler (ig/ref :example/ring-handler)}
+;;    :example/ring-handler {}})
 
-(defmethod ig/init-key :figwheel [_ {:keys [ring-handler]}]
-  (component/start
-   (component/system-map
-    :figwheel-system (-> (fig/fetch-config)
-                         (assoc-in [:data :figwheel-options :ring-handler] ring-handler)
-                         fig/figwheel-system)
-    :css-watcher (fig/css-watcher
-                  {:watch-paths ["resources/public/css"]}))))
+;; (defmethod ig/init-key :figwheel [_ {:keys [ring-handler]}]
+;;   (component/start
+;;    (component/system-map
+;;     :figwheel-system (-> (fig/fetch-config)
+;;                          (assoc-in [:data :figwheel-options :ring-handler] ring-handler)
+;;                          fig/figwheel-system)
+;;     :css-watcher (fig/css-watcher
+;;                   {:watch-paths ["resources/public/css"]}))))
 
-(defmethod ig/halt-key! :figwheel [_ figwheel-system]
-  (component/stop figwheel-system))
+;; (defmethod ig/halt-key! :figwheel [_ figwheel-system]
+;;   (component/stop figwheel-system))
 
-(ig/load-namespaces dev-config)
+;; (ig/load-namespaces dev-config)
 
-(integrant.repl/set-prep! (constantly dev-config))
+;; (integrant.repl/set-prep! (constantly dev-config))
 
-(defn cljs-repl
-  "Initializes and starts the cljs REPL"
-  []
-  (fig/cljs-repl (get-in system [:figwheel :figwheel-system])))
+;; (defn cljs-repl
+;;   "Initializes and starts the cljs REPL"
+;;   []
+;;   (fig/cljs-repl (get-in system [:figwheel :figwheel-system])))

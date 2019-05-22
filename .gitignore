@@ -17,6 +17,9 @@ checkouts/
 resources/public/js/compiled
 *.log
 
+### shadow-cljs ###
+.shadow-cljs
+node_modules
 
 ### Emacs ###
 # -*- mode: gitignore; -*-

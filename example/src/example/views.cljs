@@ -1,8 +1,11 @@
 (ns example.views
   (:require [re-frame.core :refer [subscribe dispatch]]
 
+            [reflecti.ant-design :as antd]
             [reflecti.formal :as formal]
             [reflecti.formal.ui.antd :as formal-antd]
+
+            [reflecti.font-awesome :as fa]
 
             [reflecti.word-cloud :refer [cloud]]
 
@@ -135,6 +138,7 @@
 (defn main-panel
   []
   [:div
+   [fa/icon {:type :light :name "calculator" :classes ["fa-2x"]}]
    [video-demo]
    [forms-demo]
    [word-cloud-demo]])

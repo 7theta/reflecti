@@ -1,0 +1,8 @@
+{:lein true
+ :builds {:dev {:target :browser
+                :output-dir "example/resources/public/js/compiled"
+                :asset-path "js/compiled"
+                :modules {:main {:init-fn example.core/init}}
+                :compiler-options {:infer-externs :auto}
+                :devtools {:http-root "example/resources/public"
+                           :http-port 9333}}}}

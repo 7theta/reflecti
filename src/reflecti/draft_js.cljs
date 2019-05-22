@@ -15,31 +15,31 @@
             [utilis.map :refer [deep-merge]]
             [utilis.fn :refer [fsafe]]
             [reagent.core :refer [adapt-react-class]]
-            [cljsjs.draft-js]))
+            ["draft-js" :as draft-js]))
 
-(def ^:private djs-editor (adapt-react-class js/Draft.Editor))
+(def ^:private djs-editor (adapt-react-class draft-js/Editor))
 
 (defn state
   [contents]
   (if contents
-    (.createWithContent js/Draft.EditorState contents)
-    (.createEmpty js/Draft.EditorState)))
+    (.createWithContent draft-js/EditorState contents)
+    (.createEmpty draft-js/EditorState)))
 
 (defn text-state
   [text]
-  (state (.createFromText js/Draft.ContentState text)))
+  (state (.createFromText draft-js/ContentState text)))
 
 (defn deserialize
   [text]
-  (state (when text (js/Draft.convertFromRaw (js/JSON.parse text)))))
+  (state (when text (draft-js/convertFromRaw (js/JSON.parse text)))))
 
 (defn serialize
   [state]
-  (js/JSON.stringify (js/Draft.convertToRaw (.getCurrentContent state))))
+  (js/JSON.stringify (draft-js/convertToRaw (.getCurrentContent state))))
 
 (defn apply-style
   [contents style]
-  (.toggleInlineStyle js/Draft.RichUtils contents style))
+  (.toggleInlineStyle draft-js/RichUtils contents style))
 
 (defn empty?
   [state]
@@ -56,7 +56,7 @@
                   :spell-check true
                   :handle-key-command
                   (fn [command]
-                    (if-let [new-state (.handleKeyCommand js/Draft.RichUtils state command)]
+                    (if-let [new-state (.handleKeyCommand draft-js/RichUtils state command)]
                       (do (on-change new-state) "handled")
                       "not-handled"))
                   :style style}]]))

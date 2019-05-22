@@ -9,7 +9,7 @@
   (re-frame/clear-subscription-cache!)
   (reagent/render [views/main-panel] (.getElementById js/document "app")))
 
-(defn ^:export init []
+(defn ^:dev/after-load init []
   (re-frame/dispatch-sync [:initialize-db])
   (enable-console-print!)
   (mount-root))
