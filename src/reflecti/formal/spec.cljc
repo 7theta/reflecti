@@ -1,7 +1,8 @@
 (ns reflecti.formal.spec
   (:require [reflecti.formal.shared :refer [registry *deferred* *spec-id*]]
             #?(:clj [clojure.spec.alpha :as s]
-               :cljs [cljs.spec.alpha :as s])))
+               :cljs [cljs.spec.alpha :as s])
+            [clojure.string :as st]))
 
 ;;; API
 
@@ -39,6 +40,18 @@
         ([] values)
         ([x] (valid? x)))
       {::key ::select})))
+
+(defn auto-complete
+  [values]
+  (let [valid? (comp boolean
+                  #(or (and (string? %)
+                            (seq (st/trim %)))
+                       (some? %)))]
+    (with-meta
+      (fn auto-complete
+        ([] values)
+        ([x] (valid? x)))
+      {::key ::auto-complete})))
 
 (defn string
   [pred]
