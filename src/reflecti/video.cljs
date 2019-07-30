@@ -34,8 +34,6 @@
 
 ;;; API
 
-(js/console.log screenfull)
-
 (defn player
   []
   (let [player (r/atom nil)
