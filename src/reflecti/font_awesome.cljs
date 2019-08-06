@@ -9,7 +9,7 @@
   by passing a seq of strings. Examples can be found at:
     http://fontawesome.io/examples/"
   [{:keys [name type classes] :or {type :regular} :as props}]
-  {:pre [(#{:solid :regular :light :brands} type)]}
+  {:pre [(#{:solid :regular :light :duotone :brands} type)]}
   [:i (merge
        {:class (str (->> type clojure.core/name first (str "fa"))
                     " fa-" name " " (st/join " " classes))}
