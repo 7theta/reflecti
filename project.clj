@@ -16,7 +16,7 @@
   :dependencies [[reagent "0.8.1"
                   :exclusions [cljsjs/react cljsjs/react-dom
                                cljsjs/react-dom-server]]
-                 [com.7theta/utilis "1.2.0"]
+                 [com.7theta/utilis "1.5.1"]
                  [metosin/spec-tools "0.9.1"]
                  [appliedscience/js-interop "0.1.20"]
                  [inflections "0.13.2"]

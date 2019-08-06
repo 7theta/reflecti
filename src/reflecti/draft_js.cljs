@@ -52,7 +52,8 @@
 (defn rich-editor
   []
   (let [editor-container-id (str "editor-container-" (gensym))]
-    (fn [{:keys [state on-change disabled placeholder style error media-base-url]
+    (fn [{:keys [state on-change disabled placeholder style error media-base-url
+                media-disabled]
          :or {media-base-url "/media"}
          :as props}]
       (let [on-change (fsafe on-change)]
@@ -81,6 +82,7 @@
           [toolbar
            {:editor-container-id editor-container-id
             :editor-state state
+            :media-disabled media-disabled
             :media-base-url media-base-url
             :on-change on-change}]]]))))
 
@@ -387,7 +389,7 @@
                             left (if (neg? screen-left) (- (j/get parent-boundary :left)) left)]
                         (j/assoc-in! toolbar-node [:style :left] (str left "px")))))))))))
       :reagent-render
-      (fn [{:keys [editor-state media-base-url on-change]}]
+      (fn [{:keys [editor-state media-disabled media-base-url on-change]}]
         (let [apply-text-style (fn [style event]
                                  (.preventDefault event)
                                  ((fsafe on-change) (apply-style editor-state style)))
@@ -395,18 +397,18 @@
               anchor-block (anchor-block editor-state)]
 
           [:div
-
-           (when (and @updated? (j/call selection-state :isCollapsed)
-                      anchor-block (zero? (j/call anchor-block :getLength)))
-             [:div {:id side-button-id
-                    :style {:position "absolute"
-                            :background-color "transparent"
-                            :border-radius 5}}
-              [toolbar-button
-               {:icon "paperclip"
-                :style {:color "#323845"
-                        :box-shadow "none"}
-                :on-click (fn [] ((fsafe on-change) (add-block editor-state "media" {:base-url media-base-url})))}]])
+           (when-not media-disabled
+             (when (and @updated? (j/call selection-state :isCollapsed)
+                        anchor-block (zero? (j/call anchor-block :getLength)))
+               [:div {:id side-button-id
+                      :style {:position "absolute"
+                              :background-color "transparent"
+                              :border-radius 5}}
+                [toolbar-button
+                 {:icon "paperclip"
+                  :style {:color "#323845"
+                          :box-shadow "none"}
+                  :on-click (fn [] ((fsafe on-change) (add-block editor-state "media" {:base-url media-base-url})))}]]))
 
            (when (not (j/call selection-state :isCollapsed))
              [:div {:id inline-toolbar-id
