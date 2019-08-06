@@ -1,5 +1,6 @@
 (ns reflecti.react-digraph
   (:require [utilis.map :refer [compact]]
+            [applied-science.js-interop :as j]
             [react-digraph :as dg]
             [reagent.core :as r]))
 
@@ -44,7 +45,7 @@
 (defn pan-to-node
   ([graph-view node-id] (pan-to-node graph-view node-id true))
   ([graph-view node-id zoom?]
-   (.panToNode ^dg/GraphView graph-view node-id zoom?)))
+   (j/call graph-view :panToNode node-id zoom?)))
 
 (defn default-node-shape
   [{:keys [id]}]
