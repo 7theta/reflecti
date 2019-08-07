@@ -115,7 +115,7 @@
                                             :classes ["fa-2x"]
                                             :style {:color "green"
                                                     :float "left"}}]))
-       camel-case-keys
+       (camel-case-keys :lower)
        clj->js)))
 
 (defn notification-error
@@ -127,7 +127,7 @@
                                             :classes ["fa-2x"]
                                             :style {:color "red"
                                                     :float "left"}}]))
-       camel-case-keys
+       (camel-case-keys :lower)
        clj->js)))
 
 (defn notification-info
@@ -139,7 +139,7 @@
                                             :classes ["fa-2x"]
                                             :style {:color "#1890ff"
                                                     :float "left"}}]))
-       camel-case-keys
+       (camel-case-keys :lower)
        clj->js)))
 
 (defn notification-warning
@@ -151,5 +151,5 @@
                                             :classes ["fa-2x"]
                                             :style {:color "orange"
                                                     :float "left"}}]))
-       camel-case-keys
+       (camel-case-keys :lower)
        clj->js)))
