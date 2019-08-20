@@ -616,6 +616,26 @@
                                         (:option value))))
                   :style (style props)}})]))))
 
+(defmethod spec->input :reflecti.formal.spec/tags
+  [{::keys [spec-id ui required?] :as props}]
+  (let [this (r/current-component)
+        {:keys [blur?] :or {blur? false}} (r/state this)]
+    [input-form-item
+     (merge props
+            {::component (ui-component-for-key ui :formal/tags)
+             ::validate? (has-value? props)
+             ::input-props
+             {:placeholder (->label spec-id)
+              :value (value props)
+              :label (->label spec-id)
+              :disabled? (disabled? props)
+              :required? required?
+              :on-focus (fn [] (r/set-state this {:blur? false}))
+              :on-blur (fn [] (r/set-state this {:blur? true}))
+              :default-value (value props)
+              :on-change (on-input-change props)
+              :style (style props)}})]))
+
 (defmethod spec->input :reflecti.formal/set
   [props]
   [spec->input (assoc props ::spec-key :spec-tools.visitor/set)])

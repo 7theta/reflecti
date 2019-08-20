@@ -53,6 +53,15 @@
         ([x] (valid? x)))
       {::key ::auto-complete})))
 
+(defn tags
+  []
+  (let [valid? (partial every? string?)]
+    (with-meta
+      (fn tags
+        ([] )
+        ([x] (valid? x)))
+      {::key ::tags})))
+
 (defn string
   [pred]
   (fn [x]

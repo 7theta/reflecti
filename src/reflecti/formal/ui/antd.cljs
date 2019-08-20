@@ -180,6 +180,35 @@
          :default-value default-value
          :on-change on-change}]])))
 
+(formal/definput ::ui :formal/tags
+  (fn [{:keys [value disabled? default-value style on-change on-focus on-blur placeholder] :as props}]
+    (let [this (r/current-component)
+          {:keys [text]} (r/state this)
+          ds (if text [(str text)] [])]
+      (prn :ds ds :tags-value value)
+      [antd-input-form-item props
+       [:div {:style {:display "flex"
+                      :flex-direction "row"
+                      :align-items "center"
+                      :justify-content "flex-start"}}
+        (->> value
+             (map-indexed
+              (fn [idx tag]
+                [antd/tag
+                 {:key (str idx "-" tag)}
+                 tag]))
+             doall)
+        [antd/auto-complete
+         {:style {:min-width 200}
+          :on-focus on-focus
+          :on-blur on-blur
+          :dataSource ds
+          :on-search #(r/set-state this {:text %})
+          :on-select (fn [tag]
+                       (prn :value value :select tag)
+                       (on-change (conj (vec value) tag))
+                       (r/set-state this {:text ""}))}]]])))
+
 ;;; Private
 
 (defn- antd-input-form-item
