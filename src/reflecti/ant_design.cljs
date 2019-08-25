@@ -112,9 +112,9 @@
    (-> config
        (assoc :icon (r/as-element [fa/icon {:type :light
                                             :name "check-circle"
-                                            :classes ["fa-2x"]
                                             :style {:color "green"
-                                                    :float "left"}}]))
+                                                    :float "left"
+                                                    :font-size 36}}]))
        (camel-case-keys :lower)
        clj->js)))
 
@@ -124,9 +124,9 @@
    (-> config
        (assoc :icon (r/as-element [fa/icon {:type :light
                                             :name "exclamation-circle"
-                                            :classes ["fa-2x"]
                                             :style {:color "red"
-                                                    :float "left"}}]))
+                                                    :float "left"
+                                                    :font-size 36}}]))
        (camel-case-keys :lower)
        clj->js)))
 
@@ -136,9 +136,9 @@
    (-> config
        (assoc :icon (r/as-element [fa/icon {:type :light
                                             :name "info-circle"
-                                            :classes ["fa-2x"]
                                             :style {:color "#1890ff"
-                                                    :float "left"}}]))
+                                                    :float "left"
+                                                    :font-size 36}}]))
        (camel-case-keys :lower)
        clj->js)))
 
@@ -148,8 +148,8 @@
    (-> config
        (assoc :icon (r/as-element [fa/icon {:type :light
                                             :name "exclamation-triangle"
-                                            :classes ["fa-2x"]
                                             :style {:color "orange"
-                                                    :float "left"}}]))
+                                                    :float "left"
+                                                    :font-size 36}}]))
        (camel-case-keys :lower)
        clj->js)))
