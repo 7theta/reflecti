@@ -1,6 +1,6 @@
 (ns reflecti.react-digraph
   (:require [utilis.map :refer [compact]]
-            [applied-science.js-interop :as j]
+            [utilis.js :as j]
             [react-digraph :as dg]
             [reagent.core :as r]))
 

@@ -20,6 +20,7 @@ resources/public/js/compiled
 ### shadow-cljs ###
 .shadow-cljs
 node_modules
+package-lock.json
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
