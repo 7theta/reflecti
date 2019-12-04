@@ -293,9 +293,7 @@
           (let [this (r/current-component)
                 {:keys [a]} (r/state this)
                 _ (when a @a)]
-            (if (hidden? props)
-              [div]
-              [spec->input (xform-props props)]))))})))
+            [spec->input (xform-props props)])))})))
 
 (defn make-literal [a]
   (-> a
