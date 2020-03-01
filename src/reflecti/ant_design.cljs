@@ -10,10 +10,11 @@
 (export-components)
 
 (defn modal
-  [{:keys [visible mask-closable width on-ok on-cancel title]} & body]
+  [{:keys [visible closable mask-closable width on-ok on-cancel title]} & body]
   (-> [(r/adapt-react-class antd/Modal)
        (-> {:visible visible
-            :mask-closable (boolean mask-closable)
+            :closable closable
+            :mask-closable mask-closable
             :destroy-on-close true
             :width width
             :on-cancel on-cancel
